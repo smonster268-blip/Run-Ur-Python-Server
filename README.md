@@ -8,17 +8,18 @@
 
 ---
 
-### 📂 Detailed Architecture & Workflow
+### 📋 Requirements
+* **OS**: Windows (10/11)
+* **Python**: 3.x installed and added to **PATH**.
+* **Browser**: Any modern browser to access `localhost:8080`.
 
-This setup creates a "wrapper chain" to bypass the Windows Command Prompt GUI.
+---
 
-
+### 📂 Project Architecture
 
 ```mermaid
-graph TD
-  User((User)) -->|Logs into Windows| Startup[Windows Startup Folder]
-  Startup -->|Triggers| VBS[run_hidden.vbs]
-  VBS -->|Executes w/ WindowStyle 0| BAT[server_start.bat]
-  BAT -->|Launches| PY[python -m http.server]
-  PY -->|Service| LocalHost[http://localhost:8080]
-  Kill[stop_server.bat] -->|Taskkill /F| PY
+graph LR
+  A[run_hidden.vbs] -->|Silently Executes| B[server_start.bat]
+  B -->|Spawns| C[Python HTTP Server]
+  D[stop_server.bat] -->|Terminates| C
+  E[Windows Startup] -.->|Auto-Launch| A
